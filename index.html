@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Акбай &amp; Алина — Свадьба</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Caveat:wght@400;500&family=Jost:wght@300;400;500;600&display=swap');
+
+  :root{
+    --cream:#FFFFFF;
+    --cream-2:#F6EFDC;
+    --wine:#2E2A22;
+    --wine-dark:#171409;
+    --rose:#E8D9AE;
+    --gold:#C9A227;
+    --gold-light:#E3CD8E;
+    --ink:#2E2A22;
+    --shadow: 0 20px 50px rgba(43,36,22,0.14);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Jost', sans-serif;
+    font-weight:300;
+    font-size:18px;
+    line-height:1.65;
+    overflow-x:hidden;
+  }
+  h1,h2,h3, .display{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:400;
+    margin:0;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:1;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(181,138,80,0.06), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(46,42,34,0.05), transparent 45%);
+  }
+
+  /* ---------- LANGUAGE GATE ---------- */
+  #lang-gate{
+    position:fixed; inset:0; z-index:100;
+    background:var(--wine);
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(222,192,139,0.10), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(222,192,139,0.08), transparent 45%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:32px; text-align:center;
+    transition:opacity .8s ease, visibility .8s ease;
+  }
+  #lang-gate.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+  .gate-ornament{ width:120px; height:auto; opacity:0.85; margin-bottom:28px; }
+  .gate-title{
+    color:var(--cream);
+    font-size:clamp(20px, 4.2vw, 28px);
+    letter-spacing:0.05em;
+    font-family:'Jost', sans-serif;
+    font-weight:300;
+    text-transform:uppercase;
+    margin-bottom:34px;
+  }
+  .gate-buttons{ display:flex; gap:18px; flex-wrap:wrap; justify-content:center; }
+  .gate-btn{
+    font-family:'Cormorant Garamond', serif;
+    font-size:26px;
+    font-weight:400;
+    letter-spacing:0.03em;
+    color:var(--wine);
+    background:var(--cream);
+    border:1px solid var(--gold-light);
+    padding:17px 42px;
+    border-radius:2px;
+    cursor:pointer;
+    transition:transform .35s ease, background .35s ease, color .35s ease;
+  }
+  .gate-btn:hover, .gate-btn:focus-visible{
+    background:var(--gold-light);
+    transform:translateY(-2px);
+    outline:none;
+  }
+
+  #lang-switch{
+    position:fixed; top:20px; left:20px; z-index:40;
+    display:flex; background:rgba(246,239,227,0.85);
+    border:1px solid var(--gold-light);
+    border-radius:20px; overflow:hidden; backdrop-filter:blur(6px);
+    opacity:0; pointer-events:none; transition:opacity .6s ease;
+    font-family:'Jost', sans-serif; font-size:13px; letter-spacing:0.08em;
+  }
+  #lang-switch.visible{ opacity:1; pointer-events:auto; }
+  #lang-switch button{
+    border:none; background:transparent; padding:8px 14px; cursor:pointer;
+    color:var(--wine); text-transform:uppercase; font-family:inherit; font-size:inherit;
+  }
+  #lang-switch button.active{ background:var(--wine); color:var(--cream); }
+
+  #music-toggle{
+    position:fixed; top:20px; right:20px; z-index:40;
+    width:44px; height:44px; border-radius:50%;
+    background:rgba(246,239,227,0.85); border:1px solid var(--gold-light);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    opacity:0; pointer-events:none; transition:opacity .6s ease, transform .3s ease;
+    backdrop-filter:blur(6px);
+  }
+  #music-toggle.visible{ opacity:1; pointer-events:auto; }
+  #music-toggle:hover{ transform:scale(1.06); }
+  #music-toggle svg{ width:18px; height:18px; stroke:var(--wine); }
+  #music-toggle .bar{ transform-origin:bottom; transition:transform .3s ease; }
+  #music-toggle.playing .bar1{ animation:bounce 1s ease-in-out infinite; }
+  #music-toggle.playing .bar2{ animation:bounce 1s ease-in-out infinite .2s; }
+  #music-toggle.playing .bar3{ animation:bounce 1s ease-in-out infinite .4s; }
+  @keyframes bounce{ 0%,100%{transform:scaleY(0.4);} 50%{transform:scaleY(1);} }
+
+  main{ opacity:0; transition:opacity .8s ease; }
+  main.visible{ opacity:1; }
+
+  section, header.hero{ position:relative; z-index:2; }
+
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .9s ease, transform .9s ease; }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:80px 24px 60px;
+  }
+  .hero-kicker{
+    font-size:16px; letter-spacing:0.28em; text-transform:uppercase;
+    color:var(--wine); margin-bottom:12px; opacity:0.8; font-weight:300;
+  }
+  .hero-event{
+    font-size:clamp(19px,2.8vw,23px); letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--gold); margin-bottom:38px; font-weight:300;
+  }
+  .hero-frame{
+    position:relative; width:min(320px, 78vw); aspect-ratio:3/4;
+    margin-bottom:34px;
+  }
+  .hero-frame svg.frame-deco{ position:absolute; inset:-26px; width:calc(100% + 52px); height:calc(100% + 52px); }
+  .photo-placeholder{
+    width:100%; height:100%; border-radius:2px;
+    background:
+      linear-gradient(160deg, var(--rose) 0%, var(--wine) 100%);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow);
+    border:1px solid var(--gold-light);
+    overflow:hidden;
+  }
+  .photo-placeholder img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .hero-names{
+    font-family:'Caveat', cursive;
+    font-size:clamp(44px, 10vw, 84px);
+    font-weight:400;
+    line-height:1.15;
+    color:var(--wine);
+    letter-spacing:0.01em;
+  }
+  .hero-connector{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:0.42em;
+    color:var(--gold);
+    padding:0 0.15em;
+    vertical-align:middle;
+  }
+  .hero-date{
+    margin-top:28px; font-size:clamp(21px,2.8vw,25px);
+    font-style:italic; font-weight:400;
+    letter-spacing:0.08em; color:var(--ink); opacity:0.85;
+  }
+  .hero-time{
+    margin-top:12px; font-size:16px; letter-spacing:0.08em; color:var(--gold);
+    text-transform:uppercase; opacity:0.9; line-height:1.7;
+  }
+  .scroll-hint{
+    margin-top:56px; font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--wine); opacity:0.6;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+  }
+  .scroll-hint svg{ width:14px; height:14px; animation:dip 1.8s ease-in-out infinite; }
+  @keyframes dip{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+
+  .frieze{ display:flex; justify-content:center; padding:6px 0 0; opacity:0.9; }
+  .frieze svg{ width:min(560px, 86vw); height:auto; }
+
+  .section{ padding:100px 24px; max-width:1080px; margin:0 auto; }
+  .section-head{ text-align:center; margin-bottom:56px; }
+  .section-eyebrow{
+    display:block; font-size:14px; letter-spacing:0.24em; text-transform:uppercase;
+    color:var(--gold); margin-bottom:16px; font-weight:300;
+  }
+  .section-title{ font-size:clamp(38px,5.8vw,56px); font-weight:400; color:var(--wine); }
+  .section-sub{ margin-top:16px; font-size:18px; line-height:1.7; color:var(--ink); opacity:0.7; max-width:520px; margin-left:auto; margin-right:auto; }
+
+  /* ---------- countdown ---------- */
+  .countdown-grid{
+    display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:14px;
+    max-width:600px; margin:0 auto;
+  }
+  .cd-box{
+    width:auto; min-width:0; padding:28px 4px; text-align:center;
+    background:var(--cream-2); border:1px solid var(--gold-light); border-radius:2px;
+  }
+  .cd-num{ font-family:'Cormorant Garamond', serif; font-weight:400; font-size:clamp(26px,7.5vw,58px); color:var(--wine); line-height:1; }
+  .cd-label{ margin-top:9px; font-size:clamp(9px,2.4vw,13px); letter-spacing:0.08em; text-transform:uppercase; opacity:0.7; white-space:nowrap; }
+
+  /* ---------- location ---------- */
+  .location-card{
+    display:block; text-align:center;
+    background:var(--cream-2); border:1px solid var(--gold-light); border-radius:2px; padding:46px;
+    max-width:520px; margin:0 auto;
+  }
+  .location-name{ font-size:32px; font-weight:400; color:var(--wine); margin-bottom:12px; }
+  .location-address{ font-size:17px; opacity:0.75; margin-bottom:24px; line-height:1.7; }
+  .location-address a{ color:inherit; text-decoration:none; border-bottom:1px solid var(--gold-light); transition:opacity .3s ease; }
+  .location-address a:hover{ opacity:1; }
+  .map-btn{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:'Jost', sans-serif; font-size:15px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--cream); background:var(--wine); border:none; padding:16px 30px; border-radius:2px;
+    text-decoration:none; cursor:pointer; transition:background .3s ease;
+  }
+  .map-btn:hover{ background:var(--wine-dark); }
+  .map-btn svg{ width:14px; height:14px; }
+
+  /* ---------- footer ---------- */
+  footer{ text-align:center; padding:70px 24px 60px; }
+  .footer-names{ font-size:30px; font-weight:400; color:var(--wine); margin-bottom:12px; }
+  .footer-note{ font-size:15px; letter-spacing:0.04em; opacity:0.65; }
+
+  @media (max-width: 760px){
+    .countdown-grid{ gap:10px; }
+    .cd-box{ padding:20px 2px; }
+    .section{ padding:72px 20px; }
+  }
+
+  @media (max-width: 420px){
+    body{ font-size:17px; }
+    .hero{ padding:64px 18px 48px; }
+    .hero-kicker{ font-size:14px; letter-spacing:0.2em; }
+    .hero-event{ letter-spacing:0.14em; }
+    .footer-names{ font-size:24px; }
+    .countdown-grid{ gap:7px; }
+    .cd-box{ padding:16px 2px; }
+    .location-card{ padding:32px 22px; }
+    .location-name{ font-size:26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<!-- LANGUAGE GATE -->
+<div id="lang-gate">
+  <svg class="gate-ornament" viewBox="0 0 140 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10,50 C10,20 35,5 50,5 C62,5 70,13 70,24 C70,32 63,38 55,38 C49,38 45,34 45,28 C45,23 49,20 53,21"
+      stroke="#DEC08B" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M130,50 C130,20 105,5 90,5 C78,5 70,13 70,24 C70,32 77,38 85,38 C91,38 95,34 95,28 C95,23 91,20 87,21"
+      stroke="#DEC08B" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <circle cx="70" cy="52" r="3.2" fill="#DEC08B"/>
+  </svg>
+  <div class="gate-title">Выберите язык / Тилди тандаңыз</div>
+  <div class="gate-buttons">
+    <button class="gate-btn" data-lang="ru">Русский</button>
+    <button class="gate-btn" data-lang="ky">Кыргызча</button>
+  </div>
+</div>
+
+<div id="lang-switch">
+  <button data-lang="ru">RU</button>
+  <button data-lang="ky">КЫР</button>
+</div>
+
+<button id="music-toggle" aria-label="Toggle music" aria-pressed="false">
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+    <rect class="bar bar1" x="4" y="9" width="3" height="6"></rect>
+    <rect class="bar bar2" x="10.5" y="6" width="3" height="12"></rect>
+    <rect class="bar bar3" x="17" y="9" width="3" height="6"></rect>
+  </svg>
+</button>
+
+<audio id="bg-audio" loop preload="auto">
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<main id="site">
+
+  <!-- HERO -->
+  <header class="hero">
+    <span class="hero-kicker" id="t-kicker">Приглашение на</span>
+    <span class="hero-event" id="t-event">СВАДЬБА</span>
+
+    <div class="hero-frame">
+      <svg class="frame-deco" viewBox="0 0 300 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20,30 C20,15 32,5 46,5" stroke="#B58A50" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <path d="M280,30 C280,15 268,5 254,5" stroke="#B58A50" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <path d="M20,350 C20,365 32,375 46,375" stroke="#B58A50" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <path d="M280,350 C280,365 268,375 254,375" stroke="#B58A50" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <circle cx="150" cy="4" r="2.4" fill="#B58A50"/>
+        <circle cx="150" cy="376" r="2.4" fill="#B58A50"/>
+      </svg>
+      <div class="photo-placeholder">
+        <img src="couple.jpg" alt="Акбай и Алина" onerror="this.style.display='none'">
+      </div>
+    </div>
+
+    <h1 class="hero-names">Акбай<span class="hero-connector" id="t-connector">&amp;</span>Алина</h1>
+    <div class="hero-date" id="t-date">11 октября 2026</div>
+    <div class="hero-time" id="t-time">Сбор гостей — 16:00<br>Начало торжества — 17:00</div>
+
+    <div class="scroll-hint">
+      <span id="t-scrollhint">Листайте вниз</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="#6C2C3A" stroke-width="1.6"><path d="M12 4v16M6 14l6 6 6-6"/></svg>
+    </div>
+  </header>
+
+  <div class="frieze">
+    <svg viewBox="0 0 560 40" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="20" x2="560" y2="20" stroke="#DEC08B" stroke-width="1"/>
+      <g stroke="#B58A50" stroke-width="1.2" fill="none">
+        <path d="M60,20 C60,10 70,4 80,4 C88,4 93,9 93,15 C93,20 89,23 84,23 C80,23 78,21 78,18"/>
+        <path d="M180,20 C180,10 190,4 200,4 C208,4 213,9 213,15 C213,20 209,23 204,23 C200,23 198,21 198,18"/>
+        <path d="M300,20 C300,10 310,4 320,4 C328,4 333,9 333,15 C333,20 329,23 324,23 C320,23 318,21 318,18"/>
+        <path d="M420,20 C420,10 430,4 440,4 C448,4 453,9 453,15 C453,20 449,23 444,23 C440,23 438,21 438,18"/>
+      </g>
+      <circle cx="280" cy="20" r="3.4" fill="#B58A50"/>
+    </svg>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <section class="section reveal" id="countdown-section">
+    <div class="section-head">
+      <span class="section-eyebrow" id="t-cd-eyebrow">Ожидание</span>
+      <h2 class="section-title" id="t-cd-title">До свадьбы осталось</h2>
+    </div>
+    <div class="countdown-grid">
+      <div class="cd-box"><div class="cd-num" id="cd-days">00</div><div class="cd-label" id="t-cd-days">Дней</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-hours">00</div><div class="cd-label" id="t-cd-hours">Часов</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-minutes">00</div><div class="cd-label" id="t-cd-minutes">Минут</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-seconds">00</div><div class="cd-label" id="t-cd-seconds">Секунд</div></div>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section class="section reveal" id="location-section">
+    <div class="section-head">
+      <span class="section-eyebrow" id="t-loc-eyebrow">Где</span>
+      <h2 class="section-title" id="t-loc-title">Место проведения</h2>
+    </div>
+    <div class="location-card">
+      <div class="location-name" id="t-loc-name">Название площадки уточняется</div>
+      <div class="location-address" id="t-loc-address">Адрес будет добавлен позже</div>
+      <a href="https://www.google.com/maps" target="_blank" rel="noopener" class="map-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-11a7 7 0 1 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        <span id="t-loc-btn">Открыть карту</span>
+      </a>
+    </div>
+  </section>
+
+  <div class="frieze">
+    <svg viewBox="0 0 560 40" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="20" x2="560" y2="20" stroke="#DEC08B" stroke-width="1"/>
+      <g stroke="#B58A50" stroke-width="1.2" fill="none">
+        <path d="M60,20 C60,30 70,36 80,36 C88,36 93,31 93,25 C93,20 89,17 84,17 C80,17 78,19 78,22"/>
+        <path d="M420,20 C420,30 430,36 440,36 C448,36 453,31 453,25 C453,20 449,17 444,17 C440,17 438,19 438,22"/>
+      </g>
+      <circle cx="280" cy="20" r="3.4" fill="#B58A50"/>
+    </svg>
+  </div>
+
+  <footer>
+    <div class="footer-names" id="t-footer-name">Свадьба Акбая и Алины</div>
+    <div class="footer-note" id="t-footer">С любовью, Акбай и Алина</div>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  const translations = {
+    ru: {
+      kicker: "Приглашение на",
+      event: "СВАДЬБА",
+      connector: "&",
+      date: "11 октября 2026",
+      gatherTime: "Сбор гостей — 16:00",
+      startTime: "Начало торжества — 17:00",
+      scrollhint: "Листайте вниз",
+      cdEyebrow: "Ожидание",
+      cdTitle: "До свадьбы осталось",
+      cdDays: "Дней", cdHours: "Часов", cdMinutes: "Минут", cdSeconds: "Секунд",
+      locEyebrow: "Где",
+      locTitle: "Место проведения",
+      locName: "Название площадки уточняется",
+      locAddress: "Адрес будет добавлен позже",
+      locBtn: "Открыть карту",
+      footerName: "Свадьба Акбая и Алины",
+      footer: "С любовью, Акбай и Алина"
+    },
+    ky: {
+      kicker: "Чакыруу",
+      event: "ҮЙЛӨНҮҮ ТОЮ",
+      connector: "жана",
+      date: "2026-жылдын 11-октябры",
+      gatherTime: "Конокторду тосуу — 16:00",
+      startTime: "Той башталышы — 17:00",
+      scrollhint: "Төмөн жылдырыңыз",
+      cdEyebrow: "Күтүү",
+      cdTitle: "Тойго чейин калды",
+      cdDays: "Күн", cdHours: "Саат", cdMinutes: "Мүнөт", cdSeconds: "Секунд",
+      locEyebrow: "Кайда",
+      locTitle: "Той өтүүчү жер",
+      locName: "Аталышы такталууда",
+      locAddress: "Дареги кийинчерээк кошулат",
+      locBtn: "Картаны ачуу",
+      footerName: "Акбай менен Алинанын тою",
+      footer: "Сүйүү менен, Акбай жана Алина"
+    }
+  };
+
+  const gate = document.getElementById('lang-gate');
+  const langSwitch = document.getElementById('lang-switch');
+  const musicToggle = document.getElementById('music-toggle');
+  const mainEl = document.getElementById('site');
+  const audio = document.getElementById('bg-audio');
+  let currentLang = 'ru';
+  let musicPlaying = false;
+
+  function setText(id, value){
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
+  }
+
+  function applyLang(lang){
+    currentLang = lang;
+    const t = translations[lang];
+    document.documentElement.lang = lang === 'ru' ? 'ru' : 'ky';
+    setText('t-kicker', t.kicker);
+    setText('t-event', t.event);
+    setText('t-connector', t.connector);
+    setText('t-date', t.date);
+    document.getElementById('t-time').innerHTML = `${t.gatherTime}<br>${t.startTime}`;
+    setText('t-scrollhint', t.scrollhint);
+    setText('t-cd-eyebrow', t.cdEyebrow);
+    setText('t-cd-title', t.cdTitle);
+    setText('t-cd-days', t.cdDays);
+    setText('t-cd-hours', t.cdHours);
+    setText('t-cd-minutes', t.cdMinutes);
+    setText('t-cd-seconds', t.cdSeconds);
+    setText('t-loc-eyebrow', t.locEyebrow);
+    setText('t-loc-title', t.locTitle);
+    setText('t-loc-name', t.locName);
+    setText('t-loc-address', t.locAddress);
+    setText('t-loc-btn', t.locBtn);
+    setText('t-footer-name', t.footerName);
+    setText('t-footer', t.footer);
+
+    document.querySelectorAll('#lang-switch button').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+  }
+
+  function enterSite(lang){
+    applyLang(lang);
+    gate.classList.add('hidden');
+    langSwitch.classList.add('visible');
+    musicToggle.classList.add('visible');
+    setTimeout(()=> mainEl.classList.add('visible'), 150);
+
+    audio.play().then(()=>{
+      musicPlaying = true;
+      musicToggle.classList.add('playing');
+      musicToggle.setAttribute('aria-pressed', 'true');
+    }).catch(()=>{
+      /* если браузер заблокировал автозапуск, гость включит музыку вручную кнопкой */
+    });
+  }
+
+  document.querySelectorAll('.gate-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=> enterSite(btn.dataset.lang));
+  });
+  document.querySelectorAll('#lang-switch button').forEach(btn=>{
+    btn.addEventListener('click', ()=> applyLang(btn.dataset.lang));
+  });
+
+  /* ---------- countdown ---------- */
+  const target = new Date('2026-10-11T16:00:00+06:00').getTime();
+  function tick(){
+    const now = Date.now();
+    let diff = Math.max(0, target - now);
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    const pad = n => String(n).padStart(2,'0');
+    setText('cd-days', pad(d));
+    setText('cd-hours', pad(h));
+    setText('cd-minutes', pad(m));
+    setText('cd-seconds', pad(s));
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ---------- music toggle ---------- */
+  musicToggle.addEventListener('click', ()=>{
+    musicPlaying = !musicPlaying;
+    musicToggle.classList.toggle('playing', musicPlaying);
+    musicToggle.setAttribute('aria-pressed', String(musicPlaying));
+    if(musicPlaying){
+      audio.play().catch(()=>{ /* добавьте файл song.mp3 рядом с wedding.html */ });
+    } else {
+      audio.pause();
+    }
+  });
+
+  /* ---------- scroll reveal ---------- */
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  applyLang('ru');
+})();
+</script>
+
+</body>
+</html>

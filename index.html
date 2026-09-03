@@ -71,18 +71,18 @@
   /* ---------- LANGUAGE GATE ---------- */
   #lang-gate{
     position:fixed; inset:0; z-index:100;
-    background:var(--wine);
+    background:var(--cream);
     background-image:
-      radial-gradient(circle at 15% 20%, rgba(222,192,139,0.10), transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(222,192,139,0.08), transparent 45%);
+      radial-gradient(circle at 15% 20%, rgba(201,162,39,0.08), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(201,162,39,0.06), transparent 45%);
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     padding:32px; text-align:center;
     transition:opacity .8s ease, visibility .8s ease;
   }
   #lang-gate.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
-  .gate-ornament{ width:120px; height:auto; opacity:0.85; margin-bottom:28px; }
+  .gate-ornament{ width:120px; height:auto; opacity:0.9; margin-bottom:28px; }
   .gate-title{
-    color:var(--cream);
+    color:var(--wine);
     font-size:clamp(20px, 4.2vw, 28px);
     letter-spacing:0.05em;
     font-family:'Jost', sans-serif;
@@ -97,15 +97,17 @@
     font-weight:400;
     letter-spacing:0.03em;
     color:var(--wine);
-    background:var(--cream);
+    background:var(--cream-2);
     border:1px solid var(--gold-light);
+    box-shadow:var(--shadow);
     padding:17px 42px;
     border-radius:2px;
     cursor:pointer;
     transition:transform .35s ease, background .35s ease, color .35s ease;
   }
   .gate-btn:hover, .gate-btn:focus-visible{
-    background:var(--gold-light);
+    background:var(--gold);
+    color:var(--cream);
     transform:translateY(-2px);
     outline:none;
   }
@@ -305,10 +307,10 @@
 <div id="lang-gate">
   <svg class="gate-ornament" viewBox="0 0 140 60" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M10,50 C10,20 35,5 50,5 C62,5 70,13 70,24 C70,32 63,38 55,38 C49,38 45,34 45,28 C45,23 49,20 53,21"
-      stroke="#DEC08B" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      stroke="#C9A227" stroke-width="1.4" fill="none" stroke-linecap="round"/>
     <path d="M130,50 C130,20 105,5 90,5 C78,5 70,13 70,24 C70,32 77,38 85,38 C91,38 95,34 95,28 C95,23 91,20 87,21"
-      stroke="#DEC08B" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-    <circle cx="70" cy="52" r="3.2" fill="#DEC08B"/>
+      stroke="#C9A227" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <circle cx="70" cy="52" r="3.2" fill="#C9A227"/>
   </svg>
   <div class="gate-title">Выберите язык / Тилди тандаңыз</div>
   <div class="gate-buttons">
@@ -383,7 +385,7 @@
         </g>
       </svg>
       <div class="photo-placeholder">
-        <img src="couple.PNG" alt="Акбай и Алина" onerror="this.style.display='none'">
+        <img src="couple.jpg" alt="Акбай и Алина" onerror="this.style.display='none'">
       </div>
     </div>
 
